@@ -83,6 +83,26 @@ module.exports = function(grunt) {
       }
     },
 
+    gitadd: {
+      task: {
+        files: {
+          src: ['*']
+        }
+      }
+    },
+    gitcommit: {
+      task: {
+        options: {
+          message: 'Testing',
+          noVerify: true,
+          noStatus: false
+        },
+        files: {
+          src: ['.']
+        }
+      }
+    }
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -122,7 +142,7 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'concat', 'eslint', 'uglify', 'mochaTest'
+    'gitcommit'
   ]);
 
   grunt.registerTask('lint', [
@@ -143,7 +163,7 @@ module.exports = function(grunt) {
   grunt.registerTask('deploy', function(n) {
     if (grunt.option('prod')){
       grunt.task.run([
-        'concat', 'eslint', 'uglify', 'mochaTest', 'nodemon', 'gitpush'
+        'concat', 'eslint', 'uglify', 'mochaTest', 'gitadd' ,'gitpush'
       ]);      
     }else{
       grunt.task.run([
