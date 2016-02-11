@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     uglify: {
       my_target: {
         files: {
-          'public/lib/built.min.js' : ['dist/built.js']
+          'public/min/built.min.js' : ['dist/built.js']
         }
       }
     },
