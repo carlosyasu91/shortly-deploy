@@ -4,10 +4,16 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     concat: {
       options: {
-        separator: ';\n',
+        separator: '// ==========================================================\n',
       },
       dist: {
-        src:[ 'public/lib/jquery.js', 'public/lib/underscore.js', 'public/lib/backbone.js', 'public/lib/handlebars.js' ],
+        src:[ 'public/client/app.js', 
+              'public/client/link.js', 
+              'public/client/links.js', 
+              'public/client/linkView.js', 
+              'public/client/linksView.js', 
+              'public/client/createLinkView.js', 
+              'public/client/router.js' ],
         dest: 'public/min/built.js'
       }
     },
@@ -32,7 +38,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'public/min/built.min.js' : ['dist/built.js']
+          'public/min/built.min.js' : ['public/min/built.js']
         }
       }
     },
@@ -40,7 +46,6 @@ module.exports = function(grunt) {
     eslint: {
       target: [
         'public/min/built.js'
-        // Add list of files to lint here
       ]
     },
 
@@ -76,7 +81,8 @@ module.exports = function(grunt) {
           branch: 'master'
         }
       }
-    }
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -106,6 +112,7 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+      grunt.task.run(['deploy', 'gitpush']);
     }
     grunt.task.run([ 'server-dev' ]);
   });
@@ -115,7 +122,11 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'concat',  'eslint',  'uglify',
+    'concat', 'eslint', 'uglify', 'mochaTest'
+  ]);
+
+  grunt.registerTask('lint', [
+    'concat','eslint'
   ]);
 
   grunt.registerTask('build', ['nodemon'
@@ -129,9 +140,17 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', ['gitpush'
-    // add your deploy tasks here
-  ]);
+  grunt.registerTask('deploy', function(n) {
+    if (grunt.option('prod')){
+      grunt.task.run([
+        'concat', 'eslint', 'uglify', 'mochaTest', 'nodemon', 'gitpush'
+      ]);      
+    }else{
+      grunt.task.run([
+        'concat', 'eslint', 'uglify', 'mochaTest', 'nodemon'
+      ]);
+    }
+  });
 
   grunt.registerTask('default', ['nodemon']);
 
