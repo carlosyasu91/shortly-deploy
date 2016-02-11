@@ -5,6 +5,7 @@ module.exports = function(grunt) {
     concat: {
     },
 
+
     mochaTest: {
       test: {
         options: {
@@ -53,12 +54,22 @@ module.exports = function(grunt) {
       prodServer: {
       }
     },
+
+    gitpush: {
+      your_target: {
+        options: {
+          remote: 'live',
+          branch: 'master'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-git');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
@@ -93,7 +104,7 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build', ['nodemon'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -104,9 +115,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
+  grunt.registerTask('deploy', ['gitpush'
     // add your deploy tasks here
   ]);
+
+  grunt.registerTask('default', ['nodemon']);
 
 
 };
