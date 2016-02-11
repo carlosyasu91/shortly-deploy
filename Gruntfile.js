@@ -86,7 +86,16 @@ module.exports = function(grunt) {
     gitadd: {
       task: {
         files: {
-          src: ['*']
+          src: ['app/**',
+                'dist/**',
+                'lib/**',
+                'public/**',
+                'src/**',
+                'views/**',
+                'server.js',
+                'server-config.js',
+                'Gruntfile.js',
+                'package.json']
         }
       }
     },
