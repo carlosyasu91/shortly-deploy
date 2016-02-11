@@ -7,8 +7,8 @@ module.exports = function(grunt) {
         separator: ';\n',
       },
       dist: {
-        src:[ 'public/lib/*.js' ],
-        dest: 'dist/built.js'
+        src:[ 'public/lib/jquery.js', 'public/lib/underscore.js', 'public/lib/backbone.js', 'public/lib/handlebars.js' ],
+        dest: 'public/min/built.js'
       }
     },
     mochaTest: {
@@ -27,6 +27,9 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        mangle: false
+      },
       my_target: {
         files: {
           'public/min/built.min.js' : ['dist/built.js']
@@ -36,6 +39,7 @@ module.exports = function(grunt) {
 
     eslint: {
       target: [
+        'public/min/built.js'
         // Add list of files to lint here
       ]
     },
@@ -111,7 +115,7 @@ module.exports = function(grunt) {
   ////////////////////////////////////////////////////
 
   grunt.registerTask('test', [
-    'concat', 'uglify'
+    'concat',  'eslint',  'uglify',
   ]);
 
   grunt.registerTask('build', ['nodemon'
