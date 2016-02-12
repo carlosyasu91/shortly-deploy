@@ -19,7 +19,9 @@ app.configure(function() {
 app.get('/', util.checkUser, handler.renderIndex);
 app.get('/create', util.checkUser, handler.renderIndex);
 
-app.get('/links', util.checkUser, handler.fetchLinks);
+
+// app.get('/links', util.checkUser, handler.fetchLinks);
+app.get('/links', handler.retrieveLinks);
 app.post('/links', handler.saveLink);
 
 app.get('/login', handler.loginUserForm);
@@ -29,6 +31,7 @@ app.get('/logout', handler.logoutUser);
 app.get('/signup', handler.signupUserForm);
 app.post('/signup', handler.signupUser);
 
-app.get('/*', handler.navToLink);
+
+// app.get('/*', handler.navToLink);
 
 module.exports = app;
