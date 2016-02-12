@@ -1,7 +1,9 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test2');
+mongoose.connect('mongodb://localhost/test');
 var crypto = require('crypto');
 var util = require('../lib/utility');
+var bcrypt = require('bcrypt-nodejs');
+var Promise = require('bluebird');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, "connection error:"));
@@ -40,7 +42,26 @@ module.exports.Link = Link;
 // module.exports = db;
 
 
-//We think we added to the database
-//
 
 
+var userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    unique: true
+  },
+  password: String,
+});
+
+userSchema.pre('save', function(next){
+  var cipher = Promise.promisify(bcrypt.hash);
+  return cipher(this.password, null, null).bind(this)
+  .then(function(hash){
+    this.password = hash;
+    next();
+  });
+
+});
+
+module.exports.User = mongoose.model('User', userSchema);
+
+module.exports.userSchema = userSchema;
